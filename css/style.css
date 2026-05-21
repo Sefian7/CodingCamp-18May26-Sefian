@@ -1,0 +1,670 @@
+/* style.css — Life Dashboard styles
+   CSS custom properties for light/dark themes.
+   Full styling will be expanded in subsequent tasks.
+*/
+
+/* ── Theme variables ─────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --color-bg:       #ffffff;
+  --color-surface:  #f5f5f5;
+  --color-text:     #1a1a1a;
+  --color-text-sub: #555555;
+  --color-border:   #dddddd;
+  --color-accent:   #0066cc;
+  /* White text on #0066cc is ~5.7:1 — passes 4.5:1 */
+  --color-accent-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --color-bg:       #121212;
+  --color-surface:  #1e1e1e;
+  --color-text:     #e8e8e8;
+  --color-text-sub: #aaaaaa;
+  --color-border:   #333333;
+  --color-accent:   #4da6ff;
+  /* Accent button text must be dark in dark theme — white on #4da6ff is only ~2.5:1 */
+  --color-accent-text: #0a0a0a;
+}
+
+/* ── Base reset & typography ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1rem;       /* 16px minimum body font — Requirement 8.1 */
+  line-height: 1.5;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  padding: 1rem;
+  min-width: 320px;      /* Minimum supported viewport — Requirement 8.4 */
+}
+
+/* Typographic scale — proportionally larger headings (Requirement 8.1) */
+h1 { font-size: 2rem;    line-height: 1.2; }   /* 32px */
+h2 { font-size: 1.5rem;  line-height: 1.3; }   /* 24px */
+h3 { font-size: 1.25rem; line-height: 1.4; }   /* 20px */
+h4 { font-size: 1.125rem; line-height: 1.4; }  /* 18px */
+
+/* ── Interactive controls — minimum 44×44 touch target ───────────────────── */
+button,
+input[type="submit"],
+input[type="button"] {
+  min-width:  44px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="url"] {
+  min-height: 44px;
+  font-size: 1rem;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+main {
+  display: grid;
+  gap: 1rem;
+}
+
+section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+/* ── Toast notification (storage:error) ──────────────────────────────────── */
+#storage-error-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #323232;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  max-width: calc(100vw - 2rem);
+  text-align: center;
+}
+
+/* ── Responsive layout ───────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  main {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
+  main {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  body {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+}
+
+/* ── Quick Links widget ──────────────────────────────────────────────────── */
+#quick-links h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+#quick-links-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ql-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ql-field label {
+  font-size: 0.875rem;
+  color: var(--color-text-sub);
+}
+
+.ql-field input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+  width: 100%;
+}
+
+.ql-field input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+#ql-add-btn {
+  align-self: flex-start;
+  padding: 0.5rem 1.25rem;
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+#ql-add-btn:hover {
+  opacity: 0.9;
+}
+
+#ql-add-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Inline validation error (shared by Quick Links and To-Do List) */
+.error {
+  display: block;
+  min-height: 1.25rem;
+  color: #c0392b;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+[data-theme="dark"] .error {
+  /* #ff6b6b on #1e1e1e is ~4.1:1 — fails 4.5:1; use #ff8080 (~5.0:1) instead */
+  color: #ff8080;
+}
+
+/* Links list */
+#quick-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ql-empty {
+  color: var(--color-text-sub);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.ql-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.ql-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 1rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.ql-link:hover {
+  text-decoration: underline;
+}
+
+.ql-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ql-delete-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-sub);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ql-delete-btn:hover {
+  background-color: #c0392b;
+  color: #fff;
+  border-color: #c0392b;
+}
+
+.ql-delete-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── To-Do List ──────────────────────────────────────────────────────────── */
+#todo-list h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+/* Screen-reader-only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Add-task form */
+.todo-add-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+#todo-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+#todo-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+#todo-add-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#todo-add-btn:hover {
+  opacity: 0.85;
+}
+
+/* Sort control */
+.todo-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text-sub);
+}
+
+#todo-sort {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+#todo-sort:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Task list */
+#todo-task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.todo-empty {
+  color: var(--color-text-sub);
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+/* Individual task item */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  flex-wrap: wrap;
+}
+
+.task-item.completed {
+  /* Strikethrough and opacity are applied via inline styles on .task-description;
+     the completed class is kept for potential future styling hooks */
+  opacity: 0.85;
+}
+
+/* Complete toggle button */
+.task-complete-btn {
+  min-width: 44px;
+  min-height: 44px;
+  background: none;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  font-size: 1rem;
+  color: var(--color-text-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.task-item.completed .task-complete-btn {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.task-complete-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Task description */
+.task-description {
+  flex: 1;
+  font-size: 1rem;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+/* Inline edit input */
+.task-edit-input {
+  flex: 1;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+.task-edit-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Edit / Delete / Save / Cancel buttons */
+.task-edit-btn,
+.task-delete-btn,
+.task-save-btn,
+.task-cancel-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.task-edit-btn:hover,
+.task-save-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.task-delete-btn:hover,
+.task-cancel-btn:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+[data-theme="dark"] .task-delete-btn:hover,
+[data-theme="dark"] .task-cancel-btn:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+/* ── Greeting Widget ─────────────────────────────────────────────────────── */
+#greeting-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.greeting-clock {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+}
+
+.greeting-date {
+  font-size: 1rem;
+  color: var(--color-text-sub);
+}
+
+.greeting-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: 0.25rem;
+}
+
+.greeting-name-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.greeting-name-label {
+  font-size: 0.875rem;
+  color: var(--color-text-sub);
+  white-space: nowrap;
+}
+
+.greeting-name-input {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  min-height: 44px;
+  width: 12rem;
+}
+
+.greeting-name-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.greeting-name-save {
+  padding: 0.25rem 0.75rem;
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+}
+
+.greeting-name-save:hover {
+  opacity: 0.85;
+}
+
+.greeting-name-save:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── Accessibility: focus-visible outlines ───────────────────────────────── */
+/*
+ * Provide a consistent, high-contrast focus ring for all interactive elements
+ * that do not already define :focus-visible. This ensures keyboard users can
+ * always see which element has focus (WCAG 2.1 SC 2.4.7 / 2.4.11).
+ */
+
+/* Theme toggle button */
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Todo add button */
+#todo-add-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Todo task action buttons (complete, edit, delete, save, cancel) */
+.task-complete-btn:focus-visible,
+.task-edit-btn:focus-visible,
+.task-delete-btn:focus-visible,
+.task-save-btn:focus-visible,
+.task-cancel-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Focus timer buttons */
+#timer-start:focus-visible,
+#timer-stop:focus-visible,
+#timer-reset:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Sort select */
+#todo-sort:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── Focus Timer display ─────────────────────────────────────────────────── */
+.timer-display {
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  margin: 0.75rem 0;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.timer-controls button {
+  padding: 0.5rem 1.25rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.timer-controls button:not(:disabled):hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.timer-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Toast notification — accessibility ──────────────────────────────────── */
+/*
+ * The toast is created dynamically by storage.js. The role="alert" and
+ * aria-live="assertive" attributes are set in storage.js. These styles
+ * ensure it is visually distinct and readable in both themes.
+ */
+#storage-error-toast {
+  /* Existing styles already defined above; no duplicate needed */
+}
+
+/* ── Theme toggle button ─────────────────────────────────────────────────── */
+#theme-toggle {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+#theme-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}

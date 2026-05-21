@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <section id="greeting-widget" aria-label="Greeting">
+      <!-- GreetingWidget renders here -->
+    </section>
+    <button id="theme-toggle" aria-label="Toggle light/dark theme" type="button">
+      Toggle Theme
+    </button>
+  </header>
+
+  <main>
+    <section id="focus-timer" aria-label="Focus Timer">
+      <!-- FocusTimer renders here -->
+    </section>
+
+    <section id="todo-list" aria-label="To-Do List">
+      <!-- TodoList renders here -->
+    </section>
+
+    <section id="quick-links" aria-label="Quick Links">
+      <!-- QuickLinks renders here -->
+    </section>
+  </main>
+
+  <!-- Toast container is created dynamically by storage.js -->
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
